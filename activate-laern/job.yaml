@@ -1,0 +1,157 @@
+version: 2.2.0
+
+dft_job: 10
+gpumd_split_job: temperature
+work_path: ./cache
+current_job: nep
+generation: 1
+init_train_xyz: ./train.xyz
+init_nep_txt: ./nep.txt
+
+nep:
+  nep_restart: true
+  nep_restart_step: 20000
+  nep_in_path: ./nep.in
+  test_xyz_path: ./test.xyz
+
+  machine:
+    context_type: LazyLocal
+    batch_type: Slurm
+    local_root: ./
+
+  resources:
+    number_node: 1
+    cpu_per_node: 16
+    gpu_per_node: 1
+    queue_name: batch
+    group_size: 1
+    custom_flags:
+      - '#SBATCH --job-name=NepTrain-NEP'
+      - '#SBATCH --nodes=1'
+      - '#SBATCH --ntasks-per-node=16'
+      - '#SBATCH --gres=gpu:1'
+      - '#SBATCH --mem=88G'
+      - '#SBATCH --time=1000:00:00'
+      - '#SBATCH --partition=debug'
+    prepend_script:
+      - source activate gpumdkit
+      - module purge
+      - module load gcc/13.1.0
+      
+
+dft:
+  software: vasp
+  cpu_core: 24
+  kpoints_use_gamma: true
+  incar_path: /your-path/INCAR
+  use_k_stype: kspacing
+  kspacing: 0.2
+  
+
+  machine:
+    context_type: SSH
+    batch_type: Torque
+    local_root: ./
+    remote_root: /your-path/*
+    remote_profile:
+      hostname: ""
+      username: marunlin
+      password: ""
+      port: 22
+      timeout: 30
+
+  resources:
+    number_node: 1
+    cpu_per_node: 24
+    gpu_per_node: 0
+    queue_name: batch
+    group_size: 1
+    custom_flags:
+      - '#PBS -N NepTrain-DFT'
+      - '#PBS -l nodes=node27:ppn=24'
+      - '#PBS -l walltime=9999:59:59'
+      - '#PBS -q batch'
+      - '#PBS -j oe'
+    prepend_script:
+      - source activate gpumdkit
+      - source /opt/modules/module.sh
+      - module load vasp/6.3.2-all-intel2022.2
+
+gpumd:
+  step_times:
+    - 10
+    - 100
+    - 500
+    - 1000
+  temperature_every_step:
+    - 50
+    - 100
+    - 150
+    - 200
+    - 250
+    - 300
+  model_path: ./structure
+  run_in_path: ./run.in
+
+  machine:
+    context_type: LazyLocal
+    batch_type: Slurm
+    local_root: ./
+
+  resources:
+    number_node: 1
+    cpu_per_node: 16
+    gpu_per_node: 1
+    queue_name: batch
+    group_size: 1
+    custom_flags:
+      - '#SBATCH --job-name=NepTrain-GPUMD'
+      - '#SBATCH --nodes=1'
+      - '#SBATCH --ntasks-per-node=16'
+      - '#SBATCH --gres=gpu:1'
+      - '#SBATCH --mem=88G'
+      - '#SBATCH --time=1000:00:00'
+      - '#SBATCH --partition=debug'
+    prepend_script:
+      - source activate gpumdkit
+      - module purge
+      - module load gcc/13.1.0
+     
+
+
+select:
+  max_selected: 50
+  min_distance: 0.01
+  filter: 0.6
+
+  machine:
+    context_type: SSH
+    batch_type: Torque
+    local_root: ./
+    remote_root: /your-path/
+    remote_profile:
+      hostname: ""
+      username: marunlin
+      password: ""
+      port: 22
+      timeout: 30
+
+  resources:
+    number_node: 1
+    cpu_per_node: 8
+    gpu_per_node: 0
+    queue_name: batch
+    group_size: 1
+    custom_flags:
+      - '#PBS -N NepTrain-select'
+      - '#PBS -l nodes=node11:ppn=8'
+      - '#PBS -l walltime=9999:59:59'
+      - '#PBS -q batch'
+      - '#PBS -j oe'
+    prepend_script:
+      - source /opt/modules/module.sh
+      - source activate gpumdkit
+
+
+limit:
+  force: 20

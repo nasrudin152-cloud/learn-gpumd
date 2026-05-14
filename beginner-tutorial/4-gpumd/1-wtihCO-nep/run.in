@@ -1,0 +1,10 @@
+potential   ./nep.txt
+velocity    500
+
+ensemble    nvt_lan 500 500 100
+compute_rdf 6.0 400 1000 atom 0 0
+time_step   1
+dump_thermo 200
+dump_position 200
+run         500000
+

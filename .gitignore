@@ -1,0 +1,8 @@
+# Sensitive local config
+activate-laern/.NepTrain
+activate-laern/readme.pdf
+beginner-tutorial/README.html
+
+# Common runtime artifacts
+cache/
+*.log

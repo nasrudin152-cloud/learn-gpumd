@@ -1,0 +1,30 @@
+variable        NSTEPS          equal 200000
+variable        THERMO_FREQ     equal 100
+variable        DUMP_FREQ       equal 100
+variable        TEMP            equal 550.000000
+variable        PRES            equal -1.000000
+variable        TAU_T           equal 0.100000
+variable        TAU_P           equal 0.500000
+
+units           metal
+boundary        p p p
+atom_style      atomic
+
+neighbor        1.0 bin
+
+box          tilt large
+read_data 1.lmp
+change_box   all triclinic
+pair_style      deepmd graph-compress.pb
+pair_coeff      * *
+
+thermo_style    custom step temp pe ke etotal press
+thermo          ${THERMO_FREQ}
+dump            1 all custom ${DUMP_FREQ} out.lammpsdump id type x y z
+restart         50000 dpgen.restart
+
+velocity        all create ${TEMP} 641123
+fix             1 all nvt temp ${TEMP} ${TEMP} ${TAU_T}
+
+timestep        0.001000
+run             ${NSTEPS} upto
