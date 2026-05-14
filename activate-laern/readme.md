@@ -1,7 +1,7 @@
 # `job.yaml` 参数说明（NEPtrain 工作流）
 
 本文档用于解释 `activate-laern/job.yaml` 的配置含义与使用方法。  
-建议你先看“原理与流程”，再按章节对照修改自己的参数。
+建议先看”原理与流程”，再按章节对照修改参数。
 
 ---
 
@@ -94,7 +94,7 @@
 
 - `prepend_script`
   - 在主命令前执行的环境准备脚本。
-  - 你当前配置中主要做了：
+  - 当前配置中主要做了：
     - 激活环境：`source activate gpumdkit`
     - 清理模块：`module purge`
     - 加载编译器：`module load gcc/13.1.0`
@@ -123,7 +123,7 @@
   - 通过 SSH 在远端机器执行。
 
 - `batch_type: Torque`
-  - 该阶段仍使用 PBS/Torque（你当前配置如此）。
+  - 该阶段仍使用 PBS/Torque（当前配置如此）。
 
 - `local_root`
   - 本地目录。
@@ -210,20 +210,20 @@
 ### `remote_root`
 
 这是远程作业的工作根路径。  
-你现在用的是占位路径 `/your-path/`，实际使用时应改成你集群真实路径。
+当前使用的是占位路径 `/your-path/`，实际使用时应改为集群真实路径。
 
 ---
 
-## 9. 最后检查清单（必须替换为你的环境）
+## 9. 最后检查清单（必须替换为实际环境）
 
 在正式提交前，请逐项替换并核对：
 
-1. `hostname` 改为你的真实集群地址。  
-2. `username` 改为你的账户名。  
+1. `hostname` 改为真实集群地址。  
+2. `username` 改为账户名。  
 3. `password` 建议保持空，优先使用免密 SSH。  
-4. `remote_root` 改为你的真实远端目录。  
-5. `incar_path` 改为你的真实 INCAR 文件路径。  
-6. `prepend_script` 中环境名、模块名、版本号改为你机器可用值。  
-7. `custom_flags` 与你的调度系统一致（Slurm 用 `#SBATCH`，Torque 用 `#PBS`）。
+4. `remote_root` 改为真实远端目录。  
+5. `incar_path` 改为真实 INCAR 文件路径。  
+6. `prepend_script` 中环境名、模块名、版本号改为机器可用值。  
+7. `custom_flags` 与调度系统一致（Slurm 用 `#SBATCH`，Torque 用 `#PBS`）。
 
-如果这些不替换，配置大概率无法在你的实际环境中直接运行。
+如果这些不替换，配置无法在实际环境中直接运行。

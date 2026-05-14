@@ -20,7 +20,7 @@
   - DeepMD/LAMMPS 对照（真空）
   - 文件：`1.lmp`、`1.sh`、`in.lammps`
 
-## 图片说明（你新增的 4 张图）
+## 图片说明（新增的 4 张图）
 
 - `1-wtihCO-nep/1.png`：GPUMD 跑得到的结果图
 - `2-vacuum-nep/2.png`：GPUMD 跑得到的结果图
@@ -58,7 +58,7 @@ qsub gpumd.sh
 该目录当前无 `gpumd.sh`。做法：
 
 1. 从 `2-vacuum-nep/gpumd.sh` 复制一份到 `1-wtihCO-nep/`
-2. 按你的机器修改 `CUDA_VISIBLE_DEVICES` 和 `GPUMD_BIN`
+2. 按机器修改 `CUDA_VISIBLE_DEVICES` 和 `GPUMD_BIN`
 3. 在 `1-wtihCO-nep/` 提交运行
 
 ## 运行前检查清单

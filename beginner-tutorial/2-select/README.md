@@ -44,11 +44,11 @@ python3 merge_to_gpumd_xyz.py /home/marunlin/gpumd/surface-reconstruction/Datase
 
 目标是从十几万帧中抽样到约 `3000` 帧，形成后续 `3-train-nep` 训练集。
 
-> 本目录不强制固定 `gpumdkit` 命令写法，以你本地安装方式和界面为准。
+> 本目录不强制固定 `gpumdkit` 命令写法，以本地安装方式和界面为准。
 
 ### 这一步检查点
 
-- 你拿到一个规模约 `3000` 帧的筛选结果集
+- 得到规模约 `3000` 帧的筛选结果集
 - 筛选结果可被后续 NEP 训练读取（通常为 `xyz`）
 
 ## 常见问题
