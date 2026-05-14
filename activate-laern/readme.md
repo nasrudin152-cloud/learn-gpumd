@@ -360,21 +360,7 @@ limit:
 
 ## 11. 快速开始
 
-### 11.1 准备工作
-
-```bash
-# 1. 安装 NepTrain（需要 Python 3.8+）
-pip install neptrain
-
-# 2. 确认 GPUMD 和 VASP 可用
-which gpumd
-which vasp_std
-
-# 3. 准备工作目录
-cd activate-laern/
-```
-
-### 11.2 准备输入文件
+### 11.1 准备输入文件
 
 确保以下文件就位：
 
@@ -389,7 +375,7 @@ ls train.xyz test.xyz nep.in nep.txt run.in structure/
 - `run.in`：GPUMD 模拟参数
 - `structure/`：包含初始结构的目录
 
-### 11.3 修改 job.yaml
+### 11.2 修改 job.yaml
 
 将模板中的占位参数替换为你的实际环境：
 
@@ -408,24 +394,14 @@ remote_root: /home/username/neptrain-work/   # ← 替换
 incar_path: /home/username/INCAR             # ← 替换
 ```
 
-### 11.4 测试连接
-
-```bash
-# 确认 SSH 可以连通远端集群
-ssh your-username@your-cluster-ip
-
-# 确认远端路径存在
-ssh your-username@your-cluster-ip "ls /home/username/neptrain-work/"
-```
-
-### 11.5 启动主动学习
+### 11.3 启动主动学习
 
 ```bash
 # 启动 NepTrain，它会根据 current_job 和 generation 自动执行对应阶段
 neptrain job.yaml
 ```
 
-### 11.6 监控与续跑
+### 11.4 监控与续跑
 
 ```bash
 # 查看当前进度（cache 目录下有状态文件）
@@ -438,21 +414,13 @@ ls ./cache/
 neptrain job.yaml
 ```
 
-### 11.7 完整流程示例
-
-```bash
-# 第一次运行（generation 1，从 nep 开始）
-# job.yaml 中设置：
-#   current_job: nep
-#   generation: 1
-#   nep_restart: false  （首轮从头训练）
-neptrain job.yaml
-
-# NepTrain 会自动依次执行：
-#   nep → gpumd → select → dft → nep (generation 2) → ...
-# 直到所有 step_times 用完或手动停止
-```
-
 ---
 
-> **提示**：本目录的 `job.yaml` 是模板文件，其中的 hostname、remote_root、incar_path 等敏感信息已用占位符替代。实际使用时请替换为你的真实环境参数。
+> [!CAUTION]
+> **重要提醒**：除了修改 `job.yaml` 中的占位参数外，还需要修改 `~/.NepTrain` 配置文件中的软件路径，包括：
+> - **POTCAR 路径**：VASP 赝势文件目录
+> - **VASP 路径**：VASP 可执行文件路径（如 `vasp_std`、`vasp_gam`）
+> - **GPUMD 路径**：GPUMD 可执行文件路径
+> - **NEP 路径**：NEP 训练程序路径
+>
+> 如果这些路径未正确配置，NepTrain 将无法调用对应的软件，导致任务失败。
