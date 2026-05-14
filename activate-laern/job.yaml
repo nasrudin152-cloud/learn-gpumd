@@ -52,7 +52,7 @@ dft:
     context_type: SSH
     batch_type: Torque
     local_root: ./
-    remote_root: /your-path/*
+    remote_root: /your-path/
     remote_profile:
       hostname: ""
       username: marunlin
